@@ -200,4 +200,10 @@
     <string name="filter_sms_count">SMS (%1$d)</string>
     <string name="filter_data_sms_count">Data SMS (%1$d)</string>
     <string name="filter_mms_count">MMS (%1$d)</string>
+    <string name="notifications">Notifications</string>
+    <string name="notification_connection">Live Server connection alerts</string>
+    <string name="notification_incoming">Incoming SMS alerts</string>
+    <string name="notification_outgoing">Outgoing SMS alerts</string>
+    <string name="notification_sound">Notification sound</string>
+    <string name="notification_vibration">Notification vibration</string>
 </resources>

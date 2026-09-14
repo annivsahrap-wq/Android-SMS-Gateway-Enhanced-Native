@@ -31,6 +31,7 @@ class ReceiverService : KoinComponent {
     private val logsService: LogsService by inject()
     private val incomingMessagesService: IncomingMessagesService by inject()
     private val receiverSettings: ReceiverSettings by inject()
+    private val notificationsService: me.capcom.smsgateway.modules.notifications.NotificationsService by inject()
 
     private val eventsReceiver by lazy { EventsReceiver() }
     private val mmsContentObserver by lazy { MmsContentObserver() }
@@ -151,6 +152,10 @@ class ReceiverService : KoinComponent {
         }
 
         val incoming = incomingMessagesService.save(message)
+        notificationsService.notifyIncoming(context, message.sender, when (message) {
+            is InboxMessage.Text -> message.text
+            else -> null
+        })
 
         return when (message) {
             is InboxMessage.Text -> WebHookEvent.SmsReceived to SmsEventPayload.SmsReceived(

@@ -40,6 +40,7 @@ import me.capcom.smsgateway.modules.messages.events.MessageStateChangedEvent
 import me.capcom.smsgateway.modules.messages.exceptions.ConflictException
 import me.capcom.smsgateway.modules.messages.workers.LogTruncateWorker
 import me.capcom.smsgateway.modules.messages.workers.SendMessagesWorker
+import me.capcom.smsgateway.modules.notifications.NotificationsService
 import me.capcom.smsgateway.modules.mms.MmsSender
 import me.capcom.smsgateway.receivers.EventsReceiver
 import java.util.Date
@@ -55,6 +56,7 @@ class MessagesService(
     private val logsService: LogsService,
     private val mmsSender: MmsSender,
 ) {
+    private val notificationsService by lazy { NotificationsService(context) }
     /**
      * Serializes the worker (KEEP/REPLACE) decisions made from the DB snapshot
      * with the enqueues and worker reschedules, so that a concurrent enqueue
@@ -543,6 +545,10 @@ class MessagesService(
                 error
             )
         )
+
+        if (state == ProcessingState.Sent) {
+            notificationsService.notifyOutgoing(context, phone ?: msg.recipients.firstOrNull()?.phoneNumber)
+        }
     }
 
     private fun selectSimNumber(id: Long, params: SendParams): Int? {

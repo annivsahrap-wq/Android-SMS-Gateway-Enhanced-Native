@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.devtools.ksp'
-    id 'com.google.gms.google-services'
 }
 
 ksp {
@@ -15,7 +14,7 @@ android {
     defaultConfig {
         applicationId "me.capcom.smsgateway"
         minSdk 21
-        targetSdk 33
+        targetSdk 32
         versionCode 1
         versionName "1.0.0"
 

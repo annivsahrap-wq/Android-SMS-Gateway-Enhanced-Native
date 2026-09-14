@@ -27,6 +27,7 @@ class SSEForegroundService : Service() {
 
     private val notificationsSvc: NotificationsService by inject()
     private val logsService: LogsService by inject()
+    private var liveServerConnected = false
 
     private val wakeLock: PowerManager.WakeLock by lazy {
         (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -50,6 +51,10 @@ class SSEForegroundService : Service() {
             .apply {
                 onConnected = {
                     Log.d("SSEForegroundService", "SSE connected, pulling pending messages")
+                    if (!liveServerConnected) {
+                        liveServerConnected = true
+                        notificationsSvc.notifyConnection(this@SSEForegroundService, true)
+                    }
                     try {
                         PullMessagesWorker.start(this@SSEForegroundService)
                     } catch (e: Throwable) {
@@ -59,6 +64,18 @@ class SSEForegroundService : Service() {
                             "SSEForegroundService",
                             "Failed to start PullMessagesWorker on connect",
                         )
+                    }
+                }
+                onClosed = {
+                    if (liveServerConnected) {
+                        liveServerConnected = false
+                        notificationsSvc.notifyConnection(this@SSEForegroundService, false)
+                    }
+                }
+                onError = { error ->
+                    if (liveServerConnected) {
+                        liveServerConnected = false
+                        notificationsSvc.notifyConnection(this@SSEForegroundService, false)
                     }
                 }
                 onEvent = { event, data ->

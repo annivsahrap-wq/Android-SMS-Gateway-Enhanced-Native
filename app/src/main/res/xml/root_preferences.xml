@@ -58,6 +58,29 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/notifications">
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="notifications.connection"
+            app:title="@string/notification_connection" />
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="notifications.incoming"
+            app:title="@string/notification_incoming" />
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="notifications.outgoing"
+            app:title="@string/notification_outgoing" />
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="notifications.sound"
+            app:title="@string/notification_sound" />
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="notifications.vibration"
+            app:title="@string/notification_vibration" />
+    </PreferenceCategory>
+
     <PreferenceCategory
         app:key="system"
         app:title="@string/system">
